@@ -2,382 +2,274 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="Wish Cart"/>
+  <meta name="theme-color" content="#E91E8C"/>
   <title>🎀 My Wish Cart 🎀</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --pink-deep:   #C2185B;
-      --pink-mid:    #E91E8C;
-      --pink-soft:   #F48FB1;
-      --pink-pale:   #FCE4EC;
-      --pink-light:  #FFF0F5;
-      --white:       #FFFFFF;
-      --text-dark:   #4A0E2A;
-      --text-mid:    #7B3055;
-      --text-soft:   #B06080;
-      --shadow:      rgba(194,24,91,0.15);
+      --pink-deep:  #C2185B;
+      --pink-mid:   #E91E8C;
+      --pink-soft:  #F48FB1;
+      --pink-pale:  #FCE4EC;
+      --white:      #FFFFFF;
+      --text-dark:  #4A0E2A;
+      --text-mid:   #7B3055;
+      --text-soft:  #B06080;
+      --shadow:     rgba(194,24,91,0.15);
+      --safe-b:     env(safe-area-inset-bottom, 0px);
     }
 
-    /* ── BODY & BG ── */
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
       font-family: 'Nunito', sans-serif;
       background: var(--pink-pale);
       color: var(--text-dark);
       min-height: 100vh;
+      min-height: 100dvh;
       overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
-    /* floating background decorations */
-    .bg-deco {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
+    /* floating bg deco */
+    .bg-deco { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .deco-item {
-      position: absolute;
-      font-size: 2rem;
-      opacity: 0.13;
-      animation: floatDeco linear infinite;
-      user-select: none;
+      position: absolute; opacity: 0.12;
+      animation: floatDeco linear infinite; user-select: none; font-size: 1.8rem;
     }
     @keyframes floatDeco {
-      0%   { transform: translateY(0px) rotate(0deg);   opacity: 0.10; }
-      50%  { transform: translateY(-18px) rotate(12deg); opacity: 0.18; }
-      100% { transform: translateY(0px) rotate(0deg);   opacity: 0.10; }
+      0%,100% { transform: translateY(0) rotate(0deg); opacity: 0.10; }
+      50%      { transform: translateY(-16px) rotate(10deg); opacity: 0.17; }
     }
 
-    /* ── HEADER ── */
+    /* HEADER */
     header {
-      position: relative;
-      z-index: 10;
+      position: relative; z-index: 10;
       background: linear-gradient(135deg, #F8BBD0 0%, #F48FB1 50%, #E91E8C 100%);
-      padding: 2.5rem 1rem 2rem;
+      padding: 2.5rem 1rem 2.2rem;
       text-align: center;
       box-shadow: 0 4px 24px var(--shadow);
     }
     header::after {
-      content: '';
-      display: block;
-      position: absolute;
-      bottom: -18px;
-      left: 0; right: 0;
-      height: 36px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 36'%3E%3Cpath d='M0,18 Q150,0 300,18 Q450,36 600,18 Q750,0 900,18 Q1050,36 1200,18 L1200,36 L0,36Z' fill='%23FCE4EC'/%3E%3C/svg%3E") center/cover no-repeat;
+      content: ''; position: absolute; bottom: -20px; left: 0; right: 0; height: 40px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath d='M0,20 Q150,0 300,20 Q450,40 600,20 Q750,0 900,20 Q1050,40 1200,20 L1200,40 L0,40Z' fill='%23FCE4EC'/%3E%3C/svg%3E") center/cover no-repeat;
     }
-
-    .header-bows {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 0.6rem;
-    }
-    .bow-svg { width: 48px; height: 38px; filter: drop-shadow(0 2px 4px rgba(194,24,91,0.3)); }
-
+    .header-bows { display: flex; justify-content: center; gap: 8px; margin-bottom: 0.6rem; }
+    .bow-svg { width: 44px; height: 35px; filter: drop-shadow(0 2px 4px rgba(194,24,91,0.3)); }
     h1 {
       font-family: 'Pacifico', cursive;
-      font-size: clamp(2rem, 6vw, 3.8rem);
+      font-size: clamp(1.8rem, 7vw, 3.5rem);
       color: #fff;
-      text-shadow: 0 2px 8px rgba(194,24,91,0.4), 0 0 40px rgba(255,255,255,0.2);
-      letter-spacing: 1px;
-      line-height: 1.1;
+      text-shadow: 0 2px 8px rgba(194,24,91,0.4);
+      line-height: 1.15;
     }
     .header-sub {
-      margin-top: 0.5rem;
-      font-size: clamp(0.8rem, 2.5vw, 1rem);
-      color: rgba(255,255,255,0.85);
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      margin-top: 0.4rem; font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+      color: rgba(255,255,255,0.85); font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
     }
-    .header-emojis {
-      margin-top: 0.6rem;
-      font-size: 1.4rem;
-      letter-spacing: 6px;
-    }
+    .header-emojis { margin-top: 0.5rem; font-size: 1.3rem; letter-spacing: 5px; }
 
-    /* ── MAIN WRAP ── */
+    /* MAIN */
     main {
-      position: relative;
-      z-index: 10;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 3.5rem 1rem 4rem;
+      position: relative; z-index: 10;
+      max-width: 1100px; margin: 0 auto;
+      padding: 3rem 1rem 6rem;
     }
+    @media (min-width: 768px) { main { padding-bottom: 4rem; } }
 
-    /* ── SECTION TITLE ── */
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1.4rem;
-    }
+    /* SECTION TITLE */
+    .section-title { display: flex; align-items: center; gap: 10px; margin-bottom: 1.2rem; }
     .section-title h2 {
       font-family: 'Pacifico', cursive;
-      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+      font-size: clamp(1.2rem, 4vw, 1.7rem);
       color: var(--pink-deep);
     }
     .pill {
-      background: var(--pink-soft);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 4px 14px;
-      border-radius: 20px;
+      background: var(--pink-soft); color: #fff;
+      font-size: 12px; font-weight: 800;
+      padding: 4px 13px; border-radius: 20px;
     }
 
-    /* ── PORTAL CARD ── */
+    /* PORTAL */
     .portal-card {
-      background: linear-gradient(135deg, #AD1457 0%, #C2185B 60%, #E91E8C 100%);
-      border-radius: 24px;
-      padding: 2rem 1.5rem 1.8rem;
-      margin-bottom: 3.5rem;
+      background: linear-gradient(135deg, #AD1457 0%, #C2185B 55%, #E91E8C 100%);
+      border-radius: 24px; padding: 2rem 1.2rem 1.5rem;
+      margin-bottom: 3rem;
       box-shadow: 0 8px 32px rgba(194,24,91,0.25);
       position: relative;
-      overflow: visible;
     }
     .portal-bow {
-      position: absolute;
-      top: -22px;
-      left: 50%;
+      position: absolute; top: -22px; left: 50%;
       transform: translateX(-50%);
       filter: drop-shadow(0 2px 6px rgba(194,24,91,0.4));
     }
     .portal-title {
       font-family: 'Pacifico', cursive;
-      font-size: clamp(1.1rem, 3vw, 1.4rem);
-      color: #fff;
-      margin-bottom: 1.2rem;
-      text-align: center;
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      color: #fff; margin-bottom: 1rem; text-align: center;
     }
-    .portal-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media (max-width: 480px) {
-      .portal-grid { grid-template-columns: 1fr; }
-    }
-    .portal-grid input {
-      background: rgba(255,255,255,0.12);
-      border: 1.5px solid rgba(255,255,255,0.3);
-      border-radius: 12px;
-      padding: 13px 15px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
-      outline: none;
-      transition: border 0.2s, background 0.2s;
+    .portal-fields { display: flex; flex-direction: column; gap: 10px; }
+    .portal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 420px) { .portal-row { grid-template-columns: 1fr; } }
+
+    .portal-fields input {
       width: 100%;
+      background: rgba(255,255,255,0.13);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px; /* 16px stops iOS from zooming */
+      font-weight: 600;
+      color: #fff; outline: none;
+      transition: border 0.2s, background 0.2s;
+      -webkit-appearance: none; appearance: none;
     }
-    .portal-grid input::placeholder { color: rgba(255,255,255,0.5); }
-    .portal-grid input:focus {
+    .portal-fields input::placeholder { color: rgba(255,255,255,0.5); }
+    .portal-fields input:focus {
       border-color: rgba(255,255,255,0.9);
       background: rgba(255,255,255,0.2);
     }
-    .input-full { grid-column: 1 / -1; }
-    .add-btn {
-      grid-column: 1 / -1;
-      background: #fff;
-      color: var(--pink-deep);
-      border: none;
-      border-radius: 14px;
-      padding: 15px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-      letter-spacing: 0.5px;
-    }
-    .add-btn:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-    .add-btn:active { transform: scale(0.97); }
 
-    /* ── PRODUCT GRID ── */
+    .add-btn {
+      width: 100%; background: #fff; color: var(--pink-deep);
+      border: none; border-radius: 16px; padding: 16px;
+      font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+      cursor: pointer; letter-spacing: 0.5px;
+      min-height: 54px; margin-top: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .add-btn:active { transform: scale(0.97); }
+    @media (hover: hover) {
+      .add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+    }
+    .add-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    /* PRODUCT GRID */
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 22px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
     }
-    @media (max-width: 400px) {
-      .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    }
+    @media (min-width: 540px)  { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 768px)  { .product-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 1024px) { .product-grid { grid-template-columns: repeat(5, 1fr); } }
 
-    /* ── PRODUCT CARD ── */
+    /* PRODUCT CARD */
     .product-card {
-      background: #fff;
-      border-radius: 20px;
-      overflow: visible;
-      box-shadow: 0 4px 20px var(--shadow);
+      background: #fff; border-radius: 20px; overflow: visible;
+      box-shadow: 0 4px 18px var(--shadow);
       transition: transform 0.22s, box-shadow 0.22s;
       animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1) both;
-      position: relative;
-      margin-top: 22px;
+      position: relative; margin-top: 20px;
       border: 1.5px solid #FFCDD2;
     }
-    .product-card:hover {
-      transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 14px 36px rgba(194,24,91,0.2);
+    .product-card:active { transform: scale(0.97); }
+    @media (hover: hover) {
+      .product-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 12px 32px rgba(194,24,91,0.2);
+      }
     }
     @keyframes popIn {
       from { opacity: 0; transform: scale(0.85) translateY(20px); }
       to   { opacity: 1; transform: scale(1) translateY(0); }
     }
-
     .card-bow {
-      position: absolute;
-      top: -20px;
-      left: 50%;
+      position: absolute; top: -19px; left: 50%;
       transform: translateX(-50%);
-      filter: drop-shadow(0 1px 3px rgba(194,24,91,0.35));
+      filter: drop-shadow(0 1px 3px rgba(194,24,91,0.3));
     }
-
     .card-img-wrap {
-      width: 100%;
-      height: 160px;
+      width: 100%; height: 140px;
       background: var(--pink-pale);
       border-radius: 18px 18px 0 0;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 52px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 46px;
     }
-    .card-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    @media (min-width: 480px) { .card-img-wrap { height: 160px; } }
+    .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
 
-    .card-body {
-      padding: 12px 14px 14px;
-    }
+    .card-body { padding: 10px 12px 13px; }
     .card-name {
-      font-family: 'Pacifico', cursive;
-      font-size: 0.95rem;
-      color: var(--text-dark);
-      margin-bottom: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-family: 'Pacifico', cursive; font-size: 0.88rem;
+      color: var(--text-dark); margin-bottom: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .card-shop {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--pink-mid);
-      margin-bottom: 10px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--pink-mid); margin-bottom: 9px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .card-actions { display: flex; gap: 6px; }
     .view-btn {
-      flex: 1;
-      background: linear-gradient(135deg, #E91E8C, #C2185B);
-      color: #fff;
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 8px 12px;
-      border-radius: 10px;
-      text-align: center;
-      transition: opacity 0.2s, transform 0.1s;
-      white-space: nowrap;
+      flex: 1; background: linear-gradient(135deg, #E91E8C, #C2185B);
+      color: #fff; text-decoration: none;
+      font-size: 12px; font-weight: 700;
+      padding: 9px 8px; border-radius: 10px; text-align: center;
+      min-height: 38px; display: flex; align-items: center; justify-content: center;
     }
-    .view-btn:hover { opacity: 0.88; transform: scale(1.03); }
+    .view-btn:active { opacity: 0.8; }
     .del-btn {
-      background: var(--pink-pale);
-      color: var(--pink-deep);
-      border: none;
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 13px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: background 0.2s;
+      background: var(--pink-pale); color: var(--pink-deep);
+      border: none; border-radius: 10px; padding: 9px 10px;
+      font-size: 14px; cursor: pointer; font-weight: 700;
+      min-height: 38px; min-width: 38px;
+      display: flex; align-items: center; justify-content: center;
     }
-    .del-btn:hover { background: #FFB6C1; }
+    .del-btn:active { background: #FFB6C1; }
 
-    /* ── EMPTY STATE ── */
+    /* EMPTY */
     .empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 4rem 1rem;
+      grid-column: 1 / -1; text-align: center; padding: 3.5rem 1rem;
       color: var(--text-soft);
     }
-    .empty .empty-icon { font-size: 4rem; margin-bottom: 1rem; display: block; }
-    .empty p { font-size: 1rem; font-weight: 600; }
+    .empty .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+    .empty p { font-size: 1rem; font-weight: 700; }
 
-    /* ── TOAST ── */
+    /* TOAST */
     .toast {
       position: fixed;
-      bottom: 2rem;
+      bottom: calc(1.5rem + var(--safe-b));
       left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: var(--pink-deep);
-      color: #fff;
-      padding: 13px 26px;
-      border-radius: 50px;
-      font-size: 14px;
-      font-weight: 700;
+      background: var(--pink-deep); color: #fff;
+      padding: 13px 24px; border-radius: 50px;
+      font-size: 14px; font-weight: 700;
       box-shadow: 0 8px 24px rgba(194,24,91,0.35);
       transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
-      z-index: 999;
-      white-space: nowrap;
+      z-index: 999; white-space: nowrap;
+      max-width: 90vw; text-align: center;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* ── FOOTER ── */
+    /* FOOTER */
     footer {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 1.5rem;
-      font-size: 13px;
-      color: var(--text-soft);
-      font-weight: 600;
+      position: relative; z-index: 10; text-align: center;
+      padding: 1.2rem 1rem calc(1.2rem + var(--safe-b));
+      font-size: 13px; color: var(--text-soft); font-weight: 700;
     }
   </style>
 </head>
 <body>
 
-<!-- Floating background decorations -->
 <div class="bg-deco" id="bgDeco"></div>
 
-<!-- HEADER -->
 <header>
   <div class="header-bows">
-    <!-- Big bow SVG -->
-    <svg class="bow-svg" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/>
-      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/>
-      <circle cx="35" cy="27" r="7" fill="#fff"/>
-      <circle cx="35" cy="27" r="4" fill="#F48FB1"/>
-      <path d="M35 34 Q31 44 26 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M35 34 Q39 44 44 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/>
-    </svg>
-    <svg class="bow-svg" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#fff" stroke="#F8BBD0" stroke-width="1.5"/>
-      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#fff" stroke="#F8BBD0" stroke-width="1.5"/>
-      <circle cx="35" cy="27" r="7" fill="#F8BBD0"/>
-      <circle cx="35" cy="27" r="4" fill="#E91E8C"/>
-      <path d="M35 34 Q31 44 26 50" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M35 34 Q39 44 44 50" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
-    </svg>
-    <svg class="bow-svg" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/>
-      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/>
-      <circle cx="35" cy="27" r="7" fill="#fff"/>
-      <circle cx="35" cy="27" r="4" fill="#F48FB1"/>
-      <path d="M35 34 Q31 44 26 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M35 34 Q39 44 44 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/>
-    </svg>
+    <svg class="bow-svg" viewBox="0 0 70 54" fill="none"><ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/><ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/><circle cx="35" cy="27" r="7" fill="#fff"/><circle cx="35" cy="27" r="4" fill="#F48FB1"/><path d="M35 34 Q31 44 26 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 34 Q39 44 44 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    <svg class="bow-svg" viewBox="0 0 70 54" fill="none"><ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#fff" stroke="#F8BBD0" stroke-width="1.5"/><ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#fff" stroke="#F8BBD0" stroke-width="1.5"/><circle cx="35" cy="27" r="7" fill="#F8BBD0"/><circle cx="35" cy="27" r="4" fill="#E91E8C"/><path d="M35 34 Q31 44 26 50" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 34 Q39 44 44 50" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    <svg class="bow-svg" viewBox="0 0 70 54" fill="none"><ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/><ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/><circle cx="35" cy="27" r="7" fill="#fff"/><circle cx="35" cy="27" r="4" fill="#F48FB1"/><path d="M35 34 Q31 44 26 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 34 Q39 44 44 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
   </div>
   <h1>🎀 My Wish Cart 🎀</h1>
   <div class="header-sub">Curated finds &amp; favourite picks</div>
@@ -385,32 +277,27 @@
 </header>
 
 <main>
-  <!-- PORTAL -->
   <div class="section-title" style="margin-top:0.5rem;">
     <h2>✨ Add a Product</h2>
   </div>
+
   <div class="portal-card">
-    <!-- portal bow -->
-    <svg class="portal-bow" width="64" height="50" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F48FB1" stroke="#fff" stroke-width="1.5"/>
-      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F48FB1" stroke="#fff" stroke-width="1.5"/>
-      <circle cx="35" cy="27" r="7" fill="#fff"/>
-      <circle cx="35" cy="27" r="4" fill="#C2185B"/>
-      <path d="M35 34 Q31 44 26 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M35 34 Q39 44 44 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/>
-    </svg>
+    <svg class="portal-bow" width="60" height="46" viewBox="0 0 70 54" fill="none"><ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F48FB1" stroke="#fff" stroke-width="1.5"/><ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F48FB1" stroke="#fff" stroke-width="1.5"/><circle cx="35" cy="27" r="7" fill="#fff"/><circle cx="35" cy="27" r="4" fill="#C2185B"/><path d="M35 34 Q31 44 26 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 34 Q39 44 44 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
     <div class="portal-title">🛒 Add your favourite product!</div>
-    <div class="portal-grid">
-      <input class="input-full" type="url" id="iUrl"   placeholder="🔗 Paste product link (https://...)"/>
-      <input type="text" id="iName"  placeholder="🏷️ Product name"/>
-      <input type="text" id="iShop"  placeholder="🏪 Shop / store name"/>
-      <input type="text" id="iEmoji" placeholder="✨ Emoji icon  e.g. 👗"/>
-      <input type="url"  id="iImg"   placeholder="🖼️ Image URL (optional)"/>
-      <button class="add-btn" onclick="addProduct()">🎀 Add to My Wish Cart 🎀</button>
+    <div class="portal-fields">
+      <input type="url"  id="iUrl"   inputmode="url"    autocomplete="off" placeholder="🔗 Paste product link (https://)"/>
+      <div class="portal-row">
+        <input type="text" id="iName"  autocomplete="off" placeholder="🏷️ Product name"/>
+        <input type="text" id="iShop"  autocomplete="off" placeholder="🏪 Shop name"/>
+      </div>
+      <div class="portal-row">
+        <input type="text" id="iEmoji" autocomplete="off" placeholder="✨ Emoji  e.g. 👗"/>
+        <input type="url"  id="iImg"   inputmode="url"    autocomplete="off" placeholder="🖼️ Image URL (optional)"/>
+      </div>
+      <button class="add-btn" id="addBtn" onclick="addProduct()">🎀 Add to My Wish Cart 🎀</button>
     </div>
   </div>
 
-  <!-- PRODUCTS -->
   <div class="section-title">
     <h2>🧸 My Cart</h2>
     <span class="pill" id="countPill">0 items</span>
@@ -419,115 +306,97 @@
 </main>
 
 <footer>Made with 🩷 &nbsp;|&nbsp; 🎀 My Wish Cart 🎀 &nbsp;|&nbsp; 🧸💕🛍️</footer>
-
 <div class="toast" id="toast"></div>
 
 <script>
-  /* ── Background floating decorations ── */
-  const decoItems = ['🎀','🧸','💕','🌸','🎀','🧸','💗','🎀','🌷','🧸','🎀','💝','🛍️','🎀','🧸'];
-  const bgDeco = document.getElementById('bgDeco');
-  decoItems.forEach((emoji, i) => {
-    const el = document.createElement('div');
-    el.className = 'deco-item';
-    el.textContent = emoji;
-    el.style.cssText = `
-      left: ${(i * 7.3) % 98}%;
-      top:  ${(i * 13.7) % 95}%;
-      font-size: ${1.4 + (i % 4) * 0.5}rem;
-      animation-duration: ${4 + (i % 5)}s;
-      animation-delay: ${-(i * 0.7)}s;
-    `;
-    bgDeco.appendChild(el);
+  /* bg deco */
+  const decos = ['🎀','🧸','💕','🌸','🎀','🧸','💗','🎀','🌷','🧸','🎀','💝','🛍️','🎀','🧸','💕','🌸','🧸'];
+  const bg = document.getElementById('bgDeco');
+  decos.forEach((em, i) => {
+    const d = document.createElement('div');
+    d.className = 'deco-item';
+    d.textContent = em;
+    d.style.cssText = `left:${(i*6.1)%97}%;top:${(i*11.3)%94}%;font-size:${1.3+(i%4)*0.45}rem;animation-duration:${4+(i%6)}s;animation-delay:${-(i*0.65)}s`;
+    bg.appendChild(d);
   });
 
-  /* ── Storage ── */
-  const KEY = 'wishcart_v2';
-  let products = JSON.parse(localStorage.getItem(KEY) || '[]');
+  /* data */
+  const KEY = 'wishcart_v3';
+  let products = [];
+  try { products = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(products)); } catch(e) {} }
 
-  function save() { localStorage.setItem(KEY, JSON.stringify(products)); }
-
-  /* ── Add product ── */
+  /* add */
   function addProduct() {
-    const url   = document.getElementById('iUrl').value.trim();
-    const name  = document.getElementById('iName').value.trim();
-    const shop  = document.getElementById('iShop').value.trim();
-    const emoji = document.getElementById('iEmoji').value.trim();
-    const img   = document.getElementById('iImg').value.trim();
-    if (!url || !name) { toast('🎀 Please add a link and a product name!'); return; }
-    products.unshift({ id: Date.now(), url, name, shop: shop || 'Online Shop', emoji: emoji || '🛍️', img });
-    save(); render(); toast('🎀 Added to your Wish Cart!');
-    ['iUrl','iName','iShop','iEmoji','iImg'].forEach(id => document.getElementById(id).value = '');
+    const url   = g('iUrl');
+    const name  = g('iName');
+    const shop  = g('iShop');
+    const emoji = g('iEmoji');
+    const img   = g('iImg');
+    if (!url || !name)              { toast('🎀 Please add a link and product name!'); return; }
+    if (!url.startsWith('http'))    { toast('🔗 Link must start with https://');       return; }
+    const btn = document.getElementById('addBtn');
+    btn.textContent = '✅ Adding...'; btn.disabled = true;
+    setTimeout(() => {
+      products.unshift({ id: Date.now(), url, name, shop: shop||'Online Shop', emoji: emoji||'🛍️', img });
+      save(); render();
+      toast('🎀 Added to your Wish Cart!');
+      ['iUrl','iName','iShop','iEmoji','iImg'].forEach(id => document.getElementById(id).value = '');
+      btn.textContent = '🎀 Add to My Wish Cart 🎀'; btn.disabled = false;
+    }, 300);
   }
+  function g(id) { return document.getElementById(id).value.trim(); }
 
-  /* ── Remove product ── */
+  /* remove */
   function removeProduct(id) {
+    if (!confirm('Remove this product? 💔')) return;
     products = products.filter(p => p.id !== id);
     save(); render(); toast('💔 Removed from cart');
   }
 
-  /* ── Render ── */
-  function bowSVG(w, h) {
-    return `<svg width="${w}" height="${h}" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F48FB1" stroke="#C2185B" stroke-width="1.2"/>
-      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F48FB1" stroke="#C2185B" stroke-width="1.2"/>
-      <circle cx="35" cy="27" r="7" fill="#C2185B"/>
-      <circle cx="35" cy="27" r="3.5" fill="#fff"/>
-      <path d="M35 34 Q31 44 26 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M35 34 Q39 44 44 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/>
-    </svg>`;
+  /* bow svg */
+  function bow(w, h) {
+    return `<svg width="${w}" height="${h}" viewBox="0 0 70 54" fill="none"><ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F48FB1" stroke="#C2185B" stroke-width="1.2"/><ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F48FB1" stroke="#C2185B" stroke-width="1.2"/><circle cx="35" cy="27" r="7" fill="#C2185B"/><circle cx="35" cy="27" r="3.5" fill="#fff"/><path d="M35 34 Q31 44 26 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 34 Q39 44 44 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
   }
 
+  /* render */
   function render() {
     const grid = document.getElementById('productGrid');
-    const pill = document.getElementById('countPill');
-    pill.textContent = products.length + (products.length === 1 ? ' item' : ' items');
-
+    document.getElementById('countPill').textContent = products.length + (products.length === 1 ? ' item' : ' items');
     if (!products.length) {
-      grid.innerHTML = `<div class="empty">
-        <span class="empty-icon">🛒</span>
-        <p>No products yet! Add your first favourite above 🎀</p>
-      </div>`;
+      grid.innerHTML = `<div class="empty"><span class="empty-icon">🛒</span><p>No products yet!<br>Add your first favourite above 🎀</p></div>`;
       return;
     }
-
     grid.innerHTML = products.map((p, i) => `
-      <div class="product-card" style="animation-delay:${i * 0.06}s">
-        <div class="card-bow">${bowSVG(50, 40)}</div>
+      <div class="product-card" style="animation-delay:${i*0.06}s">
+        <div class="card-bow">${bow(46,36)}</div>
         <div class="card-img-wrap">
-          ${p.img
-            ? `<img src="${p.img}" alt="${escHtml(p.name)}" onerror="this.parentElement.innerHTML='<span style=font-size:52px>${p.emoji}</span>'">`
-            : `<span style="font-size:52px">${p.emoji}</span>`}
+          ${p.img ? `<img src="${e(p.img)}" alt="${e(p.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:46px>${p.emoji}</span>'">` : `<span style="font-size:46px">${p.emoji}</span>`}
         </div>
         <div class="card-body">
-          <div class="card-name" title="${escHtml(p.name)}">${escHtml(p.name)}</div>
-          <div class="card-shop">🏪 ${escHtml(p.shop)}</div>
+          <div class="card-name" title="${e(p.name)}">${e(p.name)}</div>
+          <div class="card-shop">🏪 ${e(p.shop)}</div>
           <div class="card-actions">
-            <a class="view-btn" href="${p.url}" target="_blank" rel="noopener">View 🛍️</a>
-            <button class="del-btn" onclick="removeProduct(${p.id})">🗑️</button>
+            <a class="view-btn" href="${e(p.url)}" target="_blank" rel="noopener noreferrer">View 🛍️</a>
+            <button class="del-btn" onclick="removeProduct(${p.id})" aria-label="Remove">🗑️</button>
           </div>
         </div>
-      </div>
-    `).join('');
+      </div>`).join('');
   }
+  function e(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  /* ── Toast ── */
-  let toastTimer;
+  /* toast */
+  let tt;
   function toast(msg) {
     const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+    el.textContent = msg; el.classList.add('show');
+    clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 2800);
   }
 
-  /* ── Enter key shortcut ── */
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && ['iUrl','iName','iShop','iEmoji','iImg'].includes(document.activeElement?.id)) {
-      addProduct();
+  /* enter key */
+  document.addEventListener('keydown', ev => {
+    if (ev.key === 'Enter' && ['iUrl','iName','iShop','iEmoji','iImg'].includes(document.activeElement?.id)) {
+      ev.preventDefault(); addProduct();
     }
   });
 
