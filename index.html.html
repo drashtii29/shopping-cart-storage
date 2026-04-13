@@ -1,233 +1,537 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Drashti's Shopping Cart</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎀 My Wish Cart 🎀</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-<style>
-body {
-    margin: 0;
-    font-family: Arial;
-    background: linear-gradient(135deg, #ffd6e8, #ffeaf4);
-    overflow-x: hidden;
-}
-
-/* HEADER */
-header {
-    text-align: center;
-    padding: 20px;
-    font-size: 28px;
-    color: #d63384;
-}
-
-/* FLOATING BOWS */
-.bows span {
-    position: fixed;
-    font-size: 28px;
-    animation: float 10s linear infinite;
-    opacity: 0.7;
-}
-
-.bows span:nth-child(1) { left: 5%; animation-delay: 0s; }
-.bows span:nth-child(2) { left: 20%; animation-delay: 2s; }
-.bows span:nth-child(3) { left: 40%; animation-delay: 4s; }
-.bows span:nth-child(4) { left: 60%; animation-delay: 6s; }
-.bows span:nth-child(5) { left: 80%; animation-delay: 8s; }
-
-@keyframes float {
-    0% { top: 100%; transform: rotate(0deg); }
-    100% { top: -10%; transform: rotate(360deg); }
-}
-
-/* FORM */
-.form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 15px;
-    margin: 15px;
-    background: rgba(255,255,255,0.8);
-    border-radius: 15px;
-}
-
-.form input, .form button {
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-}
-
-.form button {
-    background: #ff69b4;
-    color: white;
-    cursor: pointer;
-}
-
-/* GRID */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 15px;
-    padding: 15px;
-}
-
-/* CARD */
-.card {
-    background: #fff0f6;
-    border-radius: 18px;
-    padding: 10px;
-    box-shadow: 0 0 15px rgba(255,105,180,0.3);
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: scale(1.05);
-}
-
-.card img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 12px;
-}
-
-.card h3 {
-    color: #c2185b;
-}
-
-.actions button {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.view {
-    background: #ff85a2;
-    color: white;
-}
-
-.delete {
-    background: #ff4d6d;
-    color: white;
-}
-</style>
-</head>
-
-<body>
-
-<!-- FLOATING BOWS -->
-<div class="bows">
-    <span>🎀</span>
-    <span>🎀</span>
-    <span>🎀</span>
-    <span>🎀</span>
-    <span>🎀</span>
-</div>
-
-<header>
-🎀 Drashti's Shopping Cart 🎀
-</header>
-
-<div class="form">
-    <input id="name" placeholder="Product name">
-    <input id="price" type="number" placeholder="Price">
-    <input id="image" placeholder="Image URL">
-    <input id="link" placeholder="Product link">
-    <button onclick="addItem()">Add 🎀</button>
-</div>
-
-<div class="grid" id="grid"></div>
-
-<script>
-
-// ---------------- FIREBASE ----------------
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// ---------------- ADD ----------------
-async function addItem() {
-    const name = document.getElementById("name").value.trim();
-    const price = document.getElementById("price").value;
-    const image = document.getElementById("image").value.trim();
-    const link = document.getElementById("link").value.trim();
-
-    if (!name || !price || !link) {
-        alert("Please fill all fields 🎀");
-        return;
+    :root {
+      --pink-deep:   #C2185B;
+      --pink-mid:    #E91E8C;
+      --pink-soft:   #F48FB1;
+      --pink-pale:   #FCE4EC;
+      --pink-light:  #FFF0F5;
+      --white:       #FFFFFF;
+      --text-dark:   #4A0E2A;
+      --text-mid:    #7B3055;
+      --text-soft:   #B06080;
+      --shadow:      rgba(194,24,91,0.15);
     }
 
-    await db.collection("cartItems").add({
-        name,
-        price,
-        image: image || "https://via.placeholder.com/200",
-        link,
-        createdAt: Date.now()
-    });
+    /* ── BODY & BG ── */
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--pink-pale);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-    clearForm();
-    loadItems();
-}
+    /* floating background decorations */
+    .bg-deco {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .deco-item {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.13;
+      animation: floatDeco linear infinite;
+      user-select: none;
+    }
+    @keyframes floatDeco {
+      0%   { transform: translateY(0px) rotate(0deg);   opacity: 0.10; }
+      50%  { transform: translateY(-18px) rotate(12deg); opacity: 0.18; }
+      100% { transform: translateY(0px) rotate(0deg);   opacity: 0.10; }
+    }
 
-// ---------------- LOAD ----------------
-async function loadItems() {
-    const grid = document.getElementById("grid");
-    grid.innerHTML = "";
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      z-index: 10;
+      background: linear-gradient(135deg, #F8BBD0 0%, #F48FB1 50%, #E91E8C 100%);
+      padding: 2.5rem 1rem 2rem;
+      text-align: center;
+      box-shadow: 0 4px 24px var(--shadow);
+    }
+    header::after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: -18px;
+      left: 0; right: 0;
+      height: 36px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 36'%3E%3Cpath d='M0,18 Q150,0 300,18 Q450,36 600,18 Q750,0 900,18 Q1050,36 1200,18 L1200,36 L0,36Z' fill='%23FCE4EC'/%3E%3C/svg%3E") center/cover no-repeat;
+    }
 
-    const snapshot = await db
-        .collection("cartItems")
-        .orderBy("createdAt", "desc")
-        .get();
+    .header-bows {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 0.6rem;
+    }
+    .bow-svg { width: 48px; height: 38px; filter: drop-shadow(0 2px 4px rgba(194,24,91,0.3)); }
 
-    snapshot.forEach(doc => {
-        const item = doc.data();
+    h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(194,24,91,0.4), 0 0 40px rgba(255,255,255,0.2);
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+    .header-sub {
+      margin-top: 0.5rem;
+      font-size: clamp(0.8rem, 2.5vw, 1rem);
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .header-emojis {
+      margin-top: 0.6rem;
+      font-size: 1.4rem;
+      letter-spacing: 6px;
+    }
 
-        grid.innerHTML += `
-        <div class="card">
-            <img src="${item.image}">
-            <h3>${item.name}</h3>
-            <p>₹${item.price}</p>
+    /* ── MAIN WRAP ── */
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3.5rem 1rem 4rem;
+    }
 
-            <div class="actions">
-                <button class="view" onclick="window.open('${item.link}')">View</button>
-                <button class="delete" onclick="deleteItem('${doc.id}')">Delete</button>
-            </div>
+    /* ── SECTION TITLE ── */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.4rem;
+    }
+    .section-title h2 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+      color: var(--pink-deep);
+    }
+    .pill {
+      background: var(--pink-soft);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+
+    /* ── PORTAL CARD ── */
+    .portal-card {
+      background: linear-gradient(135deg, #AD1457 0%, #C2185B 60%, #E91E8C 100%);
+      border-radius: 24px;
+      padding: 2rem 1.5rem 1.8rem;
+      margin-bottom: 3.5rem;
+      box-shadow: 0 8px 32px rgba(194,24,91,0.25);
+      position: relative;
+      overflow: visible;
+    }
+    .portal-bow {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 2px 6px rgba(194,24,91,0.4));
+    }
+    .portal-title {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      color: #fff;
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+    .portal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 480px) {
+      .portal-grid { grid-template-columns: 1fr; }
+    }
+    .portal-grid input {
+      background: rgba(255,255,255,0.12);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      padding: 13px 15px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      outline: none;
+      transition: border 0.2s, background 0.2s;
+      width: 100%;
+    }
+    .portal-grid input::placeholder { color: rgba(255,255,255,0.5); }
+    .portal-grid input:focus {
+      border-color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.2);
+    }
+    .input-full { grid-column: 1 / -1; }
+    .add-btn {
+      grid-column: 1 / -1;
+      background: #fff;
+      color: var(--pink-deep);
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      letter-spacing: 0.5px;
+    }
+    .add-btn:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .add-btn:active { transform: scale(0.97); }
+
+    /* ── PRODUCT GRID ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 22px;
+    }
+    @media (max-width: 400px) {
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    }
+
+    /* ── PRODUCT CARD ── */
+    .product-card {
+      background: #fff;
+      border-radius: 20px;
+      overflow: visible;
+      box-shadow: 0 4px 20px var(--shadow);
+      transition: transform 0.22s, box-shadow 0.22s;
+      animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1) both;
+      position: relative;
+      margin-top: 22px;
+      border: 1.5px solid #FFCDD2;
+    }
+    .product-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 14px 36px rgba(194,24,91,0.2);
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.85) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .card-bow {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 1px 3px rgba(194,24,91,0.35));
+    }
+
+    .card-img-wrap {
+      width: 100%;
+      height: 160px;
+      background: var(--pink-pale);
+      border-radius: 18px 18px 0 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 12px 14px 14px;
+    }
+    .card-name {
+      font-family: 'Pacifico', cursive;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-shop {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--pink-mid);
+      margin-bottom: 10px;
+    }
+    .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .view-btn {
+      flex: 1;
+      background: linear-gradient(135deg, #E91E8C, #C2185B);
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 10px;
+      text-align: center;
+      transition: opacity 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .view-btn:hover { opacity: 0.88; transform: scale(1.03); }
+    .del-btn {
+      background: var(--pink-pale);
+      color: var(--pink-deep);
+      border: none;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+    .del-btn:hover { background: #FFB6C1; }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-soft);
+    }
+    .empty .empty-icon { font-size: 4rem; margin-bottom: 1rem; display: block; }
+    .empty p { font-size: 1rem; font-weight: 600; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--pink-deep);
+      color: #fff;
+      padding: 13px 26px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(194,24,91,0.35);
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+      z-index: 999;
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 13px;
+      color: var(--text-soft);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating background decorations -->
+<div class="bg-deco" id="bgDeco"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-bows">
+    <!-- Big bow SVG -->
+    <svg class="bow-svg" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/>
+      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/>
+      <circle cx="35" cy="27" r="7" fill="#fff"/>
+      <circle cx="35" cy="27" r="4" fill="#F48FB1"/>
+      <path d="M35 34 Q31 44 26 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M35 34 Q39 44 44 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>
+    <svg class="bow-svg" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#fff" stroke="#F8BBD0" stroke-width="1.5"/>
+      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#fff" stroke="#F8BBD0" stroke-width="1.5"/>
+      <circle cx="35" cy="27" r="7" fill="#F8BBD0"/>
+      <circle cx="35" cy="27" r="4" fill="#E91E8C"/>
+      <path d="M35 34 Q31 44 26 50" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M35 34 Q39 44 44 50" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>
+    <svg class="bow-svg" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/>
+      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F8BBD0" stroke="#fff" stroke-width="1.5"/>
+      <circle cx="35" cy="27" r="7" fill="#fff"/>
+      <circle cx="35" cy="27" r="4" fill="#F48FB1"/>
+      <path d="M35 34 Q31 44 26 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M35 34 Q39 44 44 50" stroke="#F8BBD0" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <h1>🎀 My Wish Cart 🎀</h1>
+  <div class="header-sub">Curated finds &amp; favourite picks</div>
+  <div class="header-emojis">🧸 💕 🛍️ 💕 🧸</div>
+</header>
+
+<main>
+  <!-- PORTAL -->
+  <div class="section-title" style="margin-top:0.5rem;">
+    <h2>✨ Add a Product</h2>
+  </div>
+  <div class="portal-card">
+    <!-- portal bow -->
+    <svg class="portal-bow" width="64" height="50" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F48FB1" stroke="#fff" stroke-width="1.5"/>
+      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F48FB1" stroke="#fff" stroke-width="1.5"/>
+      <circle cx="35" cy="27" r="7" fill="#fff"/>
+      <circle cx="35" cy="27" r="4" fill="#C2185B"/>
+      <path d="M35 34 Q31 44 26 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M35 34 Q39 44 44 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>
+    <div class="portal-title">🛒 Add your favourite product!</div>
+    <div class="portal-grid">
+      <input class="input-full" type="url" id="iUrl"   placeholder="🔗 Paste product link (https://...)"/>
+      <input type="text" id="iName"  placeholder="🏷️ Product name"/>
+      <input type="text" id="iShop"  placeholder="🏪 Shop / store name"/>
+      <input type="text" id="iEmoji" placeholder="✨ Emoji icon  e.g. 👗"/>
+      <input type="url"  id="iImg"   placeholder="🖼️ Image URL (optional)"/>
+      <button class="add-btn" onclick="addProduct()">🎀 Add to My Wish Cart 🎀</button>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="section-title">
+    <h2>🧸 My Cart</h2>
+    <span class="pill" id="countPill">0 items</span>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+</main>
+
+<footer>Made with 🩷 &nbsp;|&nbsp; 🎀 My Wish Cart 🎀 &nbsp;|&nbsp; 🧸💕🛍️</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── Background floating decorations ── */
+  const decoItems = ['🎀','🧸','💕','🌸','🎀','🧸','💗','🎀','🌷','🧸','🎀','💝','🛍️','🎀','🧸'];
+  const bgDeco = document.getElementById('bgDeco');
+  decoItems.forEach((emoji, i) => {
+    const el = document.createElement('div');
+    el.className = 'deco-item';
+    el.textContent = emoji;
+    el.style.cssText = `
+      left: ${(i * 7.3) % 98}%;
+      top:  ${(i * 13.7) % 95}%;
+      font-size: ${1.4 + (i % 4) * 0.5}rem;
+      animation-duration: ${4 + (i % 5)}s;
+      animation-delay: ${-(i * 0.7)}s;
+    `;
+    bgDeco.appendChild(el);
+  });
+
+  /* ── Storage ── */
+  const KEY = 'wishcart_v2';
+  let products = JSON.parse(localStorage.getItem(KEY) || '[]');
+
+  function save() { localStorage.setItem(KEY, JSON.stringify(products)); }
+
+  /* ── Add product ── */
+  function addProduct() {
+    const url   = document.getElementById('iUrl').value.trim();
+    const name  = document.getElementById('iName').value.trim();
+    const shop  = document.getElementById('iShop').value.trim();
+    const emoji = document.getElementById('iEmoji').value.trim();
+    const img   = document.getElementById('iImg').value.trim();
+    if (!url || !name) { toast('🎀 Please add a link and a product name!'); return; }
+    products.unshift({ id: Date.now(), url, name, shop: shop || 'Online Shop', emoji: emoji || '🛍️', img });
+    save(); render(); toast('🎀 Added to your Wish Cart!');
+    ['iUrl','iName','iShop','iEmoji','iImg'].forEach(id => document.getElementById(id).value = '');
+  }
+
+  /* ── Remove product ── */
+  function removeProduct(id) {
+    products = products.filter(p => p.id !== id);
+    save(); render(); toast('💔 Removed from cart');
+  }
+
+  /* ── Render ── */
+  function bowSVG(w, h) {
+    return `<svg width="${w}" height="${h}" viewBox="0 0 70 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="18" cy="27" rx="17" ry="11" transform="rotate(-28 18 27)" fill="#F48FB1" stroke="#C2185B" stroke-width="1.2"/>
+      <ellipse cx="52" cy="27" rx="17" ry="11" transform="rotate(28 52 27)" fill="#F48FB1" stroke="#C2185B" stroke-width="1.2"/>
+      <circle cx="35" cy="27" r="7" fill="#C2185B"/>
+      <circle cx="35" cy="27" r="3.5" fill="#fff"/>
+      <path d="M35 34 Q31 44 26 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M35 34 Q39 44 44 50" stroke="#F48FB1" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>`;
+  }
+
+  function render() {
+    const grid = document.getElementById('productGrid');
+    const pill = document.getElementById('countPill');
+    pill.textContent = products.length + (products.length === 1 ? ' item' : ' items');
+
+    if (!products.length) {
+      grid.innerHTML = `<div class="empty">
+        <span class="empty-icon">🛒</span>
+        <p>No products yet! Add your first favourite above 🎀</p>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = products.map((p, i) => `
+      <div class="product-card" style="animation-delay:${i * 0.06}s">
+        <div class="card-bow">${bowSVG(50, 40)}</div>
+        <div class="card-img-wrap">
+          ${p.img
+            ? `<img src="${p.img}" alt="${escHtml(p.name)}" onerror="this.parentElement.innerHTML='<span style=font-size:52px>${p.emoji}</span>'">`
+            : `<span style="font-size:52px">${p.emoji}</span>`}
         </div>
-        `;
-    });
-}
+        <div class="card-body">
+          <div class="card-name" title="${escHtml(p.name)}">${escHtml(p.name)}</div>
+          <div class="card-shop">🏪 ${escHtml(p.shop)}</div>
+          <div class="card-actions">
+            <a class="view-btn" href="${p.url}" target="_blank" rel="noopener">View 🛍️</a>
+            <button class="del-btn" onclick="removeProduct(${p.id})">🗑️</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
 
-// ---------------- DELETE ----------------
-async function deleteItem(id) {
-    await db.collection("cartItems").doc(id).delete();
-    loadItems();
-}
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
-// ---------------- CLEAR ----------------
-function clearForm() {
-    document.getElementById("name").value = "";
-    document.getElementById("price").value = "";
-    document.getElementById("image").value = "";
-    document.getElementById("link").value = "";
-}
+  /* ── Toast ── */
+  let toastTimer;
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  }
 
-// ---------------- START ----------------
-loadItems();
+  /* ── Enter key shortcut ── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && ['iUrl','iName','iShop','iEmoji','iImg'].includes(document.activeElement?.id)) {
+      addProduct();
+    }
+  });
 
+  render();
 </script>
-
 </body>
 </html>
